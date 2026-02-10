@@ -53,5 +53,5 @@ jobs:
         with:
           name: dist-files
       - name: Output
-        run: echo "Deploying...""                 
+        run: echo "Deploying..."                 
 
