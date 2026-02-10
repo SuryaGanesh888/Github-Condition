@@ -1,0 +1,56 @@
+name: Website Deployment
+on:
+ push:
+   branches:
+     - dev
+jobs:
+  test_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v3  
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-dep-${{hashFiles('**/package-lock.json')}}
+      - name: Install dependencises
+        run: npm ci
+      - name: Test the code
+        run: npm run test
+      - name: Upload test report
+        uses: actions/upload-artifact
+        with:
+          name: test-report
+          path: test.json
+
+  build_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-dep-${{hashFiles('**/package-lock.json')}}
+      - name: Install dependencises
+        run: npm ci
+      - name: Build the code
+        run: npm run build
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-files
+          path: dist
+  deploy_job:
+    needs: build_job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dist-files
+      - name: Output
+        run: echo "Deploying...""                 
+
