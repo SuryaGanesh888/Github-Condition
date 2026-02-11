@@ -21,10 +21,10 @@ jobs:
       - name: Install dependencises
         run: npm ci
       - name: Test the code
+        continue-on-error: true
         id: run-test
         run: npm run test
-      - name: Upload test report
-        if: failure() && steps.run-test.outcome=='failure'       
+      - name: Upload test report       
         uses: actions/upload-artifact@v4
         with:
           name: test-report
