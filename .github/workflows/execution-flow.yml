@@ -3,6 +3,7 @@ on:
  push:
    branches:
      - master
+     - dev
 jobs:
   test_job:
     runs-on: ubuntu-latest
@@ -13,13 +14,16 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 22
-      - name: Load and cache depen
-        uses: ./.github/actions/cache-depend
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-dep-${{hashFiles('**/package-lock.json')}}
+      - name: Install dependencises
+        run: npm ci
       - name: Test the code
-        continue-on-error: true
-        id: run-test
         run: npm run test
-      - name: Upload test report       
+      - name: Upload test report
         uses: actions/upload-artifact@v4
         with:
           name: test-report
@@ -35,8 +39,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 22        
-      - name: Load and cache depen
-        uses: ./.github/actions/cache-depend
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-dep-${{hashFiles('**/package-lock.json')}}
+      - name: Install dependencises
+        run: npm ci
       - name: Build the code
         run: npm run build
       - name: Upload artifacts
@@ -60,4 +69,5 @@ jobs:
           package: ./artifact
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
       - name: Output
-        run: echo "Deploying..."   
+        run: echo "Deploying in master"
+
