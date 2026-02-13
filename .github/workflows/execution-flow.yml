@@ -36,7 +36,7 @@ jobs:
         with:
           node-version: 22        
       - name: Load and cache depen
-        uses: ./.github/cache-depend/action.yml
+        uses: ./.github/actions/cache-depend
       - name: Build the code
         run: npm run build
       - name: Upload artifacts
