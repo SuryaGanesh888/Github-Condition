@@ -13,13 +13,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 22
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: npm-dep-${{hashFiles('**/package-lock.json')}}
-      - name: Install dependencises
-        run: npm ci
+      - name: Load and cache depen
+        uses: ./.github/cache-depend.action.yml
       - name: Test the code
         continue-on-error: true
         id: run-test
@@ -40,13 +35,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 22        
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: npm-dep-${{hashFiles('**/package-lock.json')}}
-      - name: Install dependencises
-        run: npm ci
+      - name: Load and cache depen
+        uses: ./.github/cache-depend.action.yml
       - name: Build the code
         run: npm run build
       - name: Upload artifacts
