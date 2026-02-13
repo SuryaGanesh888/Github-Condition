@@ -14,7 +14,7 @@ jobs:
         with:
           node-version: 22
       - name: Load and cache depen
-        uses: ./.github/cache-depend.action.yml
+        uses: ./.github/actions/cache-depend
       - name: Test the code
         continue-on-error: true
         id: run-test
